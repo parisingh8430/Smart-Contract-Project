@@ -10,12 +10,31 @@ This program is a simple contract written in Solidity, a programming language us
 It's essential to use these error handling statements judiciously to maintain the security and correctness of your smart contract. Remember that require() and revert() consume all gas when they fail, while assert() should only be used to check for internal errors and should not fail under normal conditions.
 
 # Executing Program
-To run this program, you can use Remix, an online Solidity IDE. To get started, go to the Remix website at https://gitpod.io/#https://github.com/jeffryan-POL/solidity_starter.
+To run this program, you can use Remix, an online Solidity IDE. To get started, go to the Remix website at https://remix.ethereum.org/ .
 
-Once you are on the Remix website, create a new file by clicking on the "+" icon in the left-hand sidebar. Save the file with a .sol extension (e.g., playground.sol). Copy and paste the following code written by me into the file.
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.25;
 
-To compile the code, click on the "Solidity Compiler" tab in the left-hand sidebar. Make sure the "Compiler" option is set heigher to "0.8.1" (or another compatible version), and then click on the "Compile playground.sol" button.
+contract SmartContract {
 
-Once the code is compiled, you can deploy the contract by clicking on the "Deploy & Run Transactions" tab in the left-hand sidebar. Select the "SmartContract" contract from the dropdown menu, and then click on the "Deploy" button.
+    uint gravity = 10;
+    address owner;
 
-Once the contract is deployed, you can interact with it by calling the Weight function to set the value, to perform the multiplication and value variable check to check the value of the variable that is publick so we can check that. Finally, click on the "transact" button to execute the function and retrieve the values and messages
+    constructor() {
+        
+        owner = msg.sender;
+    }
+
+    function Weight(uint _mass) public view returns (uint) {
+        require(owner == msg.sender ,"You are not the owner");
+
+        assert(_mass > 0);
+
+        if ((_mass * gravity) < 0){
+
+            revert("Weight of the object cannot be zero");
+        }
+
+        return _mass * gravity;
+    }
+}
