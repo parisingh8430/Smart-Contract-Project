@@ -1,26 +1,28 @@
-// SPDX-License-Identifier: MIT 
-pragma solidity 0.8.25;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-contract SmartContract {
+contract ErrorHandlerContract {
+    error InsufficientBalanceError(uint requiredAmount);
 
-uint gravity = 10;
-address owner;
-
-constructor() {
-    
-    owner = msg.sender;
-}
-
-function Weight(uint _mass) public view returns (uint) {
-    require(owner == msg.sender ,"You are not the owner");
-
-    assert(_mass > 0);
-
-    if ((_mass * gravity) < 0){
-
-        revert("Weight of the object cannot be zero");
+    string public tokenName = "MYTOKEN";
+    uint256 public totalSupply = 100;
+    mapping(address => uint256) public balances;
+   
+    function customRequireCheck(uint _stock) public pure returns (string memory) {
+        uint availableStock = 150;
+        require(_stock <= availableStock, "Custom error message: Stocks are not available");
+        return "Product is in cart now meanwhile you can proceed further";
     }
 
-    return _mass * gravity;
+ 
+    function customAssertCondition(uint _value) public pure returns (string memory){
+        assert(_value > 0 && _value < 99); 
+        return "Custom error message: Value must be between 1 and 99";
 }
+
+    function customRevertCondition(uint _balance, uint _amount) public pure {
+        if (_balance < _amount) {
+            revert("Custom error message: Something went wrong");
+        }
+    }
 }
